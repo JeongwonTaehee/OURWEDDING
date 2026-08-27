@@ -132,7 +132,7 @@ a {
 
 .curtain__btn:hover,
 .curtain__btn:focus {
-  background: var(--color-bg-alt);
+  background: transparent;
 }
 
 /* ═══════════════════════════════════════════
@@ -513,7 +513,7 @@ a {
    Location Section
    ═══════════════════════════════════════════ */
 .location {
-  background-color: var(--color-bg-alt);
+  background-color: transparent;
 }
 
 .location__info {
@@ -656,7 +656,7 @@ a {
    Account Section (축의금)
    ═══════════════════════════════════════════ */
 .account {
-  background-color: var(--color-bg-alt);
+  background-color: transparent;
 }
 
 .account__desc {
@@ -688,7 +688,7 @@ a {
 }
 
 .accordion__trigger:hover {
-  background: var(--color-bg-alt);
+  background: transparent;
 }
 
 .accordion__arrow {
