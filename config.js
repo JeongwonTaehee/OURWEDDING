@@ -41,15 +41,15 @@ const CONFIG = {
     address: "서울특별시  서초중앙로 14",
     tel: "02-3474-5000",
     mapLinks: {
-      kakao: "https://map.kakao.com/",
-      naver: "https://map.naver.com/"
+      kakao: "https://kko.to/wAi_Uzoyg3",
+      naver: "https://naver.me/FBMHp2S0"
     }
   },
 
   // ── 인사말 ──
   greeting: {
-    title: "퀘스트 알림",
-    content: "서로 다른 길을 걸어온 태쁘와 져너니가\n결혼이라는 최고 난이도 퀘스트를 시작하려 합니다.\n\n저희의 퀘스트 시작을\n축하해 주시면 감사하겠습니다."
+    title: "🎮 퀘스트 알림 🎮",
+    content: "서로 다른 길을 걸어온 태쁘와 져너니가\n결혼이라는 💍 최고 난이도 퀘스트를 시작하려 합니다.\n\n✨ 저희의 퀘스트 시작을\n함께 축하해 주세요💝 ✨"
   },
 
   // ── 우리의 이야기 ──
@@ -64,20 +64,19 @@ const CONFIG = {
   // ── 마음 전하실 곳 ──
   accounts: {
     groom: [
-      { role: "신랑", name: "홍길동", bank: "국민은행", number: "000-000-000000" },
-      { role: "아버지", name: "홍판서", bank: "신한은행", number: "000-000-000000" },
-      { role: "어머니", name: "김부인", bank: "우리은행", number: "000-000-000000" }
+      { role: "신랑", name: "김태희", bank: "국민은행", number: "304102-04-309908" },
+      { role: "아버지", name: "김병균", bank: "국민은행", number: "774602-04-011615" },
     ],
     bride: [
-      { role: "신부", name: "김영희", bank: "하나은행", number: "000-000-000000" },
-      { role: "아버지", name: "김사장", bank: "기업은행", number: "000-000-000000" },
-      { role: "어머니", name: "이부인", bank: "농협은행", number: "000-000-000000" }
+      { role: "신부", name: "문정원", bank: "하나은행", number: "287-910577-77107" },
+      { role: "아버지", name: "문정태", bank: "농협은행", number: "352-0509-2061-13" },
+      { role: "어머니", name: "김원주", bank: "신한은행", number: "110-130-601666" }
     ]
   },
 
   // ── 링크 공유 시 나타나는 문구 ──
   meta: {
     title: "🤵🏻태쁘 💘 👰🏻‍♀️져너니 결혼합니다",
-    description: "2026년 12월 12일, 소중한 분들을 초대합니다."
+    description: "🙇🏻 2026년 12월 12일, 소중한 분들을 초대합니다.🙇🏻‍♀️"
   }
 };
