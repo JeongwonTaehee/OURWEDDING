@@ -54,9 +54,21 @@ const CONFIG = {
 
   // ── 우리의 이야기 ──
   story: {
-    title: "LOVE STORY",
-    content: "신랑 김태희\n1998.02.27.\nISTJ\n꼬마신랑\n김중사\n\n"
+    title: "PROFILE",
+    groom: {
+      role : "신랑",
+      name : "김태희",
+      birth : "1998년 서울 출생",
+      job : "김중사🫡",
+      description : "ISTJ"
   },
+    
+    bride : {
+      role : "신부",
+      name : "문정원",
+      birth : "1998년 대구 출생",
+      job : "문주무관",
+      description : "ESFP /n 허남준을 좋아함"
 
   // ── 오시는 길 ──
   // (mapLinks는 wedding 객체 내에 포함)
