@@ -68,7 +68,7 @@ const CONFIG = {
       name : "문정원",
       birth : "1998년 대구 출생",
       job : "문주무관",
-      description : "ESFP /n 허남준을 좋아함"
+      description : "ESFP\n 허남준을 좋아함"
 
   // ── 오시는 길 ──
   // (mapLinks는 wedding 객체 내에 포함)
