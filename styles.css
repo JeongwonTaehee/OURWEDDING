@@ -444,7 +444,7 @@ a {
    Story Section
    ═══════════════════════════════════════════ */
 .story {
-  background-color: var(--color-bg-alt);
+  background-color: transparent;
 }
 
 .story__text {
