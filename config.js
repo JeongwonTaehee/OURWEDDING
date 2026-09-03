@@ -56,15 +56,15 @@ const CONFIG = {
   story: {
     title: "PROFILE",
     groom: {
-      image : "groom.jpg",
+      image : "1.jpg",
       role : "신랑",
       name : "김태희",
       birth : "1998년 서울 장안동 출생",
       job : "김중사🫡",
-      description : "이거 맞아? ISTJ\n 자칭 낭만을 즐기는 로맨틱가이🌹\n 헬창이 되고싶은 헬짱💪🏻\n "
+      description : "이거 맞아? ISTJ\n 자칭 낭만 로맨틱가이🌹\n 헬창이 되고싶은 헬짱💪🏻\n "
     },    
     bride : {
-      image : "bride.jpg",
+      image : "2.jpg",
       role : "신부",
       name : "문정원",
       birth : "1998년 성수동 출생",
