@@ -319,7 +319,7 @@
      Story Section
      ═══════════════════════════════════════════ */
 
-  function initStory(storyImages) {
+ function initStory(storyImages) {
   if ($('#storyTitle') && CONFIG.story) {
     $('#storyTitle').textContent = CONFIG.story.title;
   }
@@ -345,6 +345,9 @@
       </div>
     `;
   }
+
+  const container = $('#storyPhotos');
+  if (container) container.innerHTML = '';
 }
 
   /* ═══════════════════════════════════════════
