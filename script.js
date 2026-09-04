@@ -552,7 +552,24 @@ function initAccounts() {
     });
   }
 
-  /* ═══════════════════════════════════════════
+/* ═══════════════════════════════════════════
+   Notice Section (안내사항)
+   ═══════════════════════════════════════════ */
+
+function initNotice() {
+  if (!CONFIG.notice) return;
+
+  const noticeCard = $('#noticeCard');
+  if (noticeCard) {
+    noticeCard.innerHTML = `
+      <div style="text-align: center; margin-top: 10px;">
+        <p style="font-size: 0.95em; line-height: 1.8; color: #555; white-space: pre-line;">${CONFIG.notice.content}</p>
+      </div>
+    `;
+  }
+} 
+  
+ /* ═══════════════════════════════════════════
      Footer
      ═══════════════════════════════════════════ */
 
@@ -600,7 +617,6 @@ function initAccounts() {
 
     $$('.animate-item').forEach((el) => observer.observe(el));
 
-    // Re-observe dynamically added items
     const mutObs = new MutationObserver((mutations) => {
       mutations.forEach((m) => {
         m.addedNodes.forEach((node) => {
@@ -635,6 +651,7 @@ function initAccounts() {
     initPhotoModal();
     initLocation();
     initAccounts();
+    initNotice(); // <--- initNotice() 호출 확인
     initFooter();
     initScrollAnimations();
 
