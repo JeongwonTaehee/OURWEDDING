@@ -319,41 +319,39 @@
      Story Section
      ═══════════════════════════════════════════ */
 
-function initStory(storyImages) {
-  // 1. 로딩 표시 및 중복 요소 먼저 삭제
-  const container = $('#storyPhotos');
-  if (container) {
-    container.innerHTML = '';
+  function initStory(storyImages) {
+    const container = $('#storyPhotos');
+    if (container) {
+      container.innerHTML = '';
+    }
+
+    if ($('#storyTitle') && CONFIG.story) {
+      $('#storyTitle').textContent = CONFIG.story.title;
+    }
+
+    const contentEl = $('#storyContent');
+    if (contentEl && CONFIG.story && CONFIG.story.groom && CONFIG.story.bride) {
+      const groom = CONFIG.story.groom;
+      const bride = CONFIG.story.bride;
+      contentEl.innerHTML = `
+        <div style="display: flex; justify-content: space-around; gap: 16px; margin-top: 20px; text-align: center;">
+          <div style="flex: 1;">
+            <img src="images/story/${groom.image}" style="width: 100%; max-width: 180px; border-radius: 8px; margin-bottom: 12px;" alt="신랑">
+            <p style="margin: 4px 0;"><span style="color: #6c88a8; font-weight: bold;">${groom.role}</span> ${groom.name}</p>
+            <p style="margin: 4px 0; font-size: 0.9em; color: #666;">${groom.birth}<br>${groom.job}</p>
+            <p style="margin-top: 10px; font-size: 0.85em; white-space: pre-line; line-height: 1.4;">${groom.description}</p>
+          </div>
+          <div style="flex: 1;">
+            <img src="images/story/${bride.image}" style="width: 100%; max-width: 180px; border-radius: 8px; margin-bottom: 12px;" alt="신부">
+            <p style="margin: 4px 0;"><span style="color: #d88a8a; font-weight: bold;">${bride.role}</span> ${bride.name}</p>
+            <p style="margin: 4px 0; font-size: 0.9em; color: #666;">${bride.birth}<br>${bride.job}</p>
+            <p style="margin-top: 10px; font-size: 0.85em; white-space: pre-line; line-height: 1.4;">${bride.description}</p>
+          </div>
+        </div>
+      `;
+    }
   }
 
-  // 2. 타이틀 설정
-  if ($('#storyTitle') && CONFIG.story) {
-    $('#storyTitle').textContent = CONFIG.story.title;
-  }
-
-  // 3. 프로필 카드 출력
-  const contentEl = $('#storyContent');
-  if (contentEl && CONFIG.story && CONFIG.story.groom && CONFIG.story.bride) {
-    const groom = CONFIG.story.groom;
-    const bride = CONFIG.story.bride;
-    contentEl.innerHTML = `
-      <div style="display: flex; justify-content: space-around; gap: 16px; margin-top: 20px; text-align: center;">
-        <div style="flex: 1;">
-          <img src="images/story/${groom.image}" style="width: 100%; max-width: 180px; border-radius: 8px; margin-bottom: 12px;" alt="신랑">
-          <p style="margin: 4px 0;"><span style="color: #6c88a8; font-weight: bold;">${groom.role}</span> ${groom.name}</p>
-          <p style="margin: 4px 0; font-size: 0.9em; color: #666;">${groom.birth}<br>${groom.job}</p>
-          <p style="margin-top: 10px; font-size: 0.85em; white-space: pre-line; line-height: 1.4;">${groom.description}</p>
-        </div>
-        <div style="flex: 1;">
-          <img src="images/story/${bride.image}" style="width: 100%; max-width: 180px; border-radius: 8px; margin-bottom: 12px;" alt="신부">
-          <p style="margin: 4px 0;"><span style="color: #d88a8a; font-weight: bold;">${bride.role}</span> ${bride.name}</p>
-          <p style="margin: 4px 0; font-size: 0.9em; color: #666;">${bride.birth}<br>${bride.job}</p>
-          <p style="margin-top: 10px; font-size: 0.85em; white-space: pre-line; line-height: 1.4;">${bride.description}</p>
-        </div>
-      </div>
-    `;
-  }
-}
   /* ═══════════════════════════════════════════
      Gallery Section
      ═══════════════════════════════════════════ */
@@ -431,7 +429,6 @@ function initStory(storyImages) {
       }
     });
 
-    // Keyboard navigation
     document.addEventListener('keydown', (e) => {
       if (!modal.classList.contains('is-open')) return;
       if (e.key === 'Escape') closePhotoModal();
@@ -439,7 +436,6 @@ function initStory(storyImages) {
       if (e.key === 'ArrowRight') modalNavigate(1);
     });
 
-    // Swipe support
     const container = $('#modalContainer');
 
     container.addEventListener('touchstart', (e) => {
@@ -528,8 +524,7 @@ function initStory(storyImages) {
     });
   }
 
-function initAccounts() {
-    // 계좌 설명 문구 반영 코드 추가
+  function initAccounts() {
     const accountDescEl = document.getElementById('accountDescription');
     if (accountDescEl && CONFIG.accounts && CONFIG.accounts.description) {
       accountDescEl.textContent = CONFIG.accounts.description;
@@ -543,7 +538,6 @@ function initAccounts() {
     initAccordion('groomAccordion', 'groomAccordionPanel');
     initAccordion('brideAccordion', 'brideAccordionPanel');
 
-    // Copy account delegates
     document.addEventListener('click', (e) => {
       const btn = e.target.closest('.account-item__copy');
       if (!btn) return;
@@ -552,24 +546,24 @@ function initAccounts() {
     });
   }
 
-/* ═══════════════════════════════════════════
-   Notice Section (안내사항)
-   ═══════════════════════════════════════════ */
+  /* ═══════════════════════════════════════════
+     Notice Section (안내사항)
+     ═══════════════════════════════════════════ */
 
-function initNotice() {
-  if (!CONFIG.notice) return;
+  function initNotice() {
+    if (!CONFIG.notice) return;
 
-  const noticeCard = $('#noticeCard');
-  if (noticeCard) {
-    noticeCard.innerHTML = `
-      <div style="text-align: center; margin-top: 10px;">
-        <p style="font-size: 0.95em; line-height: 1.8; color: #555; white-space: pre-line;">${CONFIG.notice.content}</p>
-      </div>
-    `;
+    const noticeCard = $('#noticeCard');
+    if (noticeCard) {
+      noticeCard.innerHTML = `
+        <div style="text-align: center; margin-top: 10px;">
+          <p style="font-size: 0.95em; line-height: 1.8; color: #555; white-space: pre-line;">${CONFIG.notice.content}</p>
+        </div>
+      `;
+    }
   }
-} 
-  
- /* ═══════════════════════════════════════════
+
+  /* ═══════════════════════════════════════════
      Footer
      ═══════════════════════════════════════════ */
 
@@ -651,14 +645,14 @@ function initNotice() {
     initPhotoModal();
     initLocation();
     initAccounts();
-    initNotice(); // <--- initNotice() 호출 확인
+    initNotice();
     initFooter();
     initScrollAnimations();
 
-    $('#storyTitle').textContent = CONFIG.story.title;
-    $('#storyContent').textContent = CONFIG.story.content;
+    if ($('#storyTitle') && CONFIG.story) {
+      $('#storyTitle').textContent = CONFIG.story.title;
+    }
 
-    // Auto-detect images in parallel
     const [storyImages, galleryImages] = await Promise.all([
       loadImagesFromFolder('story'),
       loadImagesFromFolder('gallery')
