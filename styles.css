@@ -1068,3 +1068,34 @@ a {
   align-items: center;
   z-index: 1000;
 }
+
+/* 갤러리 더보기 접고 펼치기 스타일 */
+.gallery__grid {
+  max-height: 450px; /* 대략 6장이 예쁘게 보이는 높이 */
+  overflow: hidden;
+  position: relative;
+  transition: max-height 0.4s ease-in-out;
+}
+
+.gallery__grid.is-expanded {
+  max-height: 2000px; /* 모든 사진이 다 들어갈 수 있는 넉넉한 높이 */
+}
+
+/* 갤러리 더보기 버튼 스타일 */
+.gallery__more-btn {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  margin: 24px auto 0 auto;
+  padding: 12px 20px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.gallery__more-btn:hover {
+  background: #f9f9f9;
+}
