@@ -193,6 +193,48 @@
       </div>
     </section>
 
+    <!-- Guest Book Section (방명록) -->
+<section class="section guestbook" id="guestbook">
+  <div class="section__inner">
+    <div style="text-align: center; font-size: 0.8rem; letter-spacing: 2px; color: #888; margin-bottom: 4px;">GUEST BOOK</div>
+    <h2 class="section__title animate-item" data-animate="fade-up">방명록</h2>
+    <div class="section__divider animate-item" data-animate="fade-in"></div>
+    
+    <!-- 방명록 리스트 영역 -->
+    <div class="guestbook__list" id="guestbookList">
+      <!-- 동적으로 카드가 생성됩니다 -->
+    </div>
+
+    <!-- 버튼 영역 -->
+    <div class="guestbook__actions" style="margin-top: 24px; display: flex; flex-direction: column; gap: 10px;">
+      <button class="guestbook__btn guestbook__btn--primary" id="openWriterBtn">작성하기</button>
+      <button class="guestbook__btn guestbook__btn--outline" id="loadMoreBtn" style="display: none;">더 보기</button>
+    </div>
+  </div>
+</section>
+
+<!-- 방명록 작성 모달 -->
+<div class="modal" id="guestbookModal" style="display: none;">
+  <div class="modal__container" style="background: #fff; padding: 24px; border-radius: 12px; width: 90%; max-width: 400px; position: relative;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h3 style="margin: 0; font-size: 1.1rem;">방명록 작성</h3>
+      <button id="closeWriterBtn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+    </div>
+    <form id="guestbookForm">
+      <div style="margin-bottom: 12px;">
+        <input type="text" id="writerName" required placeholder="이름" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
+      </div>
+      <div style="margin-bottom: 12px;">
+        <input type="password" id="writerPassword" required placeholder="비밀번호 (삭제 시 필요)" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
+      </div>
+      <div style="margin-bottom: 16px;">
+        <textarea id="writerMessage" rows="4" required placeholder="따뜻한 축하의 메시지를 남겨주세요." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; resize: none;"></textarea>
+      </div>
+      <button type="submit" style="width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">등록하기</button>
+    </form>
+  </div>
+</div>
+    
     <!-- Footer -->
     <footer class="footer">
       <p class="footer__text" id="footerText"></p>
