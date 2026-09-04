@@ -21,156 +21,148 @@
 
   <link rel="stylesheet" href="styles.css">
   <script src="config.js"></script>
+
   <!-- Firebase 방명록 스크립트 -->
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-      import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-      <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyBH2pYUpolGp6-b21J5u1Va8SDYTCkFhcE",
+      authDomain: "wedding-guestbook-49fd3.firebaseapp.com",
+      projectId: "wedding-guestbook-49fd3",
+      storageBucket: "wedding-guestbook-49fd3.firebasestorage.app",
+      messagingSenderId: "314351845102",
+      appId: "1:314351845102:web:a86169a0b3e2b5ace1fdff"
+    };
 
-  // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyBH2pYUpolGp6-b21J5u1Va8SDYTCkFhcE",
-    authDomain: "wedding-guestbook-49fd3.firebaseapp.com",
-    projectId: "wedding-guestbook-49fd3",
-    storageBucket: "wedding-guestbook-49fd3.firebasestorage.app",
-    messagingSenderId: "314351845102",
-    appId: "1:314351845102:web:a86169a0b3e2b5ace1fdff"
-  };
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-</script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const listEl = document.getElementById("guestbookList");
+      const openBtn = document.getElementById("openWriterBtn");
+      const closeBtn = document.getElementById("closeWriterBtn");
+      const modal = document.getElementById("guestbookModal");
+      const form = document.getElementById("guestbookForm");
+      const loadMoreBtn = document.getElementById("loadMoreBtn");
 
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
+      let displayLimit = 5;
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const listEl = document.getElementById("guestbookList");
-        const openBtn = document.getElementById("openWriterBtn");
-        const closeBtn = document.getElementById("closeWriterBtn");
-        const modal = document.getElementById("guestbookModal");
-        const form = document.getElementById("guestbookForm");
-        const loadMoreBtn = document.getElementById("loadMoreBtn");
+      if (openBtn) openBtn.addEventListener("click", () => modal.classList.add("is-open"));
+      if (closeBtn) closeBtn.addEventListener("click", () => modal.classList.remove("is-open"));
+      if (modal) {
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal) modal.classList.remove("is-open");
+        });
+      }
 
-        let displayLimit = 5;
-
-        if (openBtn) openBtn.addEventListener("click", () => modal.classList.add("is-open"));
-        if (closeBtn) closeBtn.addEventListener("click", () => modal.classList.remove("is-open"));
-        if (modal) {
-          modal.addEventListener("click", (e) => {
-            if (e.target === modal) modal.classList.remove("is-open");
-          });
-        }
-
-        async function loadGuestbook() {
-          if (!listEl) return;
-          listEl.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">불러오는 중...</div>';
-          try {
-            const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"), limit(displayLimit));
-            const querySnapshot = await getDocs(q);
-            
-            listEl.innerHTML = "";
-            if (querySnapshot.empty) {
-              listEl.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">아직 작성된 방명록이 없습니다.</div>';
-              if (loadMoreBtn) loadMoreBtn.style.display = "none";
-              return;
-            }
-
-            querySnapshot.forEach((docSnap) => {
-              const data = docSnap.data();
-              const dateStr = data.createdAt ? new Date(data.createdAt.toDate()).toISOString().slice(2, 16).replace(/-/g, "-").replace("T", " ") : "";
-              
-              const card = document.createElement("div");
-              card.className = "guestbook-card";
-              card.innerHTML = `
-                <div class="guestbook-card__header">
-                  <span class="guestbook-card__name">${escapeHtml(data.name || '')}</span>
-                  <button class="guestbook-card__delete" data-id="${docSnap.id}">&times;</button>
-                </div>
-                <div class="guestbook-card__message">${escapeHtml(data.message || '')}</div>
-                <div class="guestbook-card__date">${dateStr}</div>
-              `;
-              listEl.appendChild(card);
-            });
-
-            if (loadMoreBtn) {
-              loadMoreBtn.style.display = querySnapshot.size >= displayLimit ? "block" : "none";
-            }
-          } catch (err) {
-            console.error(err);
-            listEl.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">방명록을 불러오지 못했습니다.</div>';
+      async function loadGuestbook() {
+        if (!listEl) return;
+        listEl.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">불러오는 중...</div>';
+        try {
+          const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"), limit(displayLimit));
+          const querySnapshot = await getDocs(q);
+          
+          listEl.innerHTML = "";
+          if (querySnapshot.empty) {
+            listEl.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">아직 작성된 방명록이 없습니다.</div>';
+            if (loadMoreBtn) loadMoreBtn.style.display = "none";
+            return;
           }
-        }
 
-        if (form) {
-          form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const name = document.getElementById("writerName").value.trim();
-            const password = document.getElementById("writerPassword").value.trim();
-            const message = document.getElementById("writerMessage").value.trim();
+          querySnapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const dateStr = data.createdAt ? new Date(data.createdAt.toDate()).toISOString().slice(2, 16).replace(/-/g, "-").replace("T", " ") : "";
+            
+            const card = document.createElement("div");
+            card.className = "guestbook-card";
+            card.innerHTML = `
+              <div class="guestbook-card__header">
+                <span class="guestbook-card__name">${escapeHtml(data.name || '')}</span>
+                <button class="guestbook-card__delete" data-id="${docSnap.id}">&times;</button>
+              </div>
+              <div class="guestbook-card__message">${escapeHtml(data.message || '')}</div>
+              <div class="guestbook-card__date">${dateStr}</div>
+            `;
+            listEl.appendChild(card);
+          });
+
+          if (loadMoreBtn) {
+            loadMoreBtn.style.display = querySnapshot.size >= displayLimit ? "block" : "none";
+          }
+        } catch (err) {
+          console.error(err);
+          listEl.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">방명록을 불러오지 못했습니다.</div>';
+        }
+      }
+
+      if (form) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const name = document.getElementById("writerName").value.trim();
+          const password = document.getElementById("writerPassword").value.trim();
+          const message = document.getElementById("writerMessage").value.trim();
+
+          try {
+            await addDoc(collection(db, "guestbook"), {
+              name,
+              password,
+              message,
+              createdAt: new Date()
+            });
+            alert("방명록이 등록되었습니다.");
+            form.reset();
+            modal.classList.remove("is-open");
+            loadGuestbook();
+          } catch (err) {
+            alert("등록에 실패했습니다.");
+          }
+        });
+      }
+
+      if (listEl) {
+        listEl.addEventListener("click", async (e) => {
+          if (e.target.classList.contains("guestbook-card__delete")) {
+            const id = e.target.dataset.id;
+            const password = prompt("작성 시 입력한 비밀번호를 입력하세요:");
+            if (!password) return;
 
             try {
-              await addDoc(collection(db, "guestbook"), {
-                name,
-                password,
-                message,
-                createdAt: new Date()
-              });
-              alert("방명록이 등록되었습니다.");
-              form.reset();
-              modal.classList.remove("is-open");
-              loadGuestbook();
-            } catch (err) {
-              alert("등록에 실패했습니다.");
-            }
-          });
-        }
-
-        if (listEl) {
-          listEl.addEventListener("click", async (e) => {
-            if (e.target.classList.contains("guestbook-card__delete")) {
-              const id = e.target.dataset.id;
-              const password = prompt("작성 시 입력한 비밀번호를 입력하세요:");
-              if (!password) return;
-
-              try {
-                const docRef = doc(db, "guestbook", id);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists() && docSnap.data().password === password) {
-                  await deleteDoc(docRef);
-                  alert("삭제되었습니다.");
-                  loadGuestbook();
-                } else {
-                  alert("비밀번호가 일치하지 않습니다.");
-                }
-              } catch (err) {
-                alert("삭제 중 오류가 발생했습니다.");
+              const docRef = doc(db, "guestbook", id);
+              const docSnap = await getDoc(docRef);
+              if (docSnap.exists() && docSnap.data().password === password) {
+                await deleteDoc(docRef);
+                alert("삭제되었습니다.");
+                loadGuestbook();
+              } else {
+                alert("비밀번호가 일치하지 않습니다.");
               }
+            } catch (err) {
+              alert("삭제 중 오류가 발생했습니다.");
             }
-          });
-        }
+          }
+        });
+      }
 
-        if (loadMoreBtn) {
-          loadMoreBtn.addEventListener("click", () => {
-            displayLimit += 5;
-            loadGuestbook();
-          });
-        }
+      if (loadMoreBtn) {
+        loadMoreBtn.addEventListener("click", () => {
+          displayLimit += 5;
+          loadGuestbook();
+        });
+      }
 
-        function escapeHtml(str) {
-          return str.replace(/[&<>'"]/g, 
-            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-          );
-        }
+      function escapeHtml(str) {
+        return str.replace(/[&<>'"]/g, 
+          tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+        );
+      }
 
-        loadGuestbook();
-      });
-    </script>
+      loadGuestbook();
+    });
+  </script>
 </head>
 <body>
 
