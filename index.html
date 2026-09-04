@@ -26,14 +26,25 @@
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
       import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-      const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
-      };
+      <script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyBH2pYUpolGp6-b21J5u1Va8SDYTCkFhcE",
+    authDomain: "wedding-guestbook-49fd3.firebaseapp.com",
+    projectId: "wedding-guestbook-49fd3",
+    storageBucket: "wedding-guestbook-49fd3.firebasestorage.app",
+    messagingSenderId: "314351845102",
+    appId: "1:314351845102:web:a86169a0b3e2b5ace1fdff"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+</script>
 
       const app = initializeApp(firebaseConfig);
       const db = getFirestore(app);
