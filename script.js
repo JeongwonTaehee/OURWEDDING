@@ -319,11 +319,19 @@
      Story Section
      ═══════════════════════════════════════════ */
 
- function initStory(storyImages) {
+function initStory(storyImages) {
+  // 1. 로딩 표시 및 중복 요소 먼저 삭제
+  const container = $('#storyPhotos');
+  if (container) {
+    container.innerHTML = '';
+  }
+
+  // 2. 타이틀 설정
   if ($('#storyTitle') && CONFIG.story) {
     $('#storyTitle').textContent = CONFIG.story.title;
   }
 
+  // 3. 프로필 카드 출력
   const contentEl = $('#storyContent');
   if (contentEl && CONFIG.story && CONFIG.story.groom && CONFIG.story.bride) {
     const groom = CONFIG.story.groom;
@@ -345,11 +353,7 @@
       </div>
     `;
   }
-
-  const container = $('#storyPhotos');
-  if (container) container.innerHTML = '';
 }
-
   /* ═══════════════════════════════════════════
      Gallery Section
      ═══════════════════════════════════════════ */
