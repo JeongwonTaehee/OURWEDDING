@@ -668,3 +668,31 @@
     init();
   }
 })();
+
+// 갤러리 접고 펼치기 기능
+window.addEventListener('DOMContentLoaded', () => {
+  const galleryGrid = document.getElementById('galleryGrid');
+  const galleryMoreBtn = document.getElementById('galleryMoreBtn');
+
+  if (galleryGrid && galleryMoreBtn) {
+    const observer = new MutationObserver(() => {
+      const items = galleryGrid.children;
+      if (items.length > 6) {
+        galleryMoreBtn.style.display = 'block';
+      } else {
+        galleryMoreBtn.style.display = 'none';
+      }
+    });
+
+    observer.observe(galleryGrid, { childList: true });
+
+    galleryMoreBtn.addEventListener('click', () => {
+      galleryGrid.classList.toggle('is-expanded');
+      if (galleryGrid.classList.contains('is-expanded')) {
+        galleryMoreBtn.textContent = '접기';
+      } else {
+        galleryMoreBtn.textContent = '갤러리 더 보기';
+      }
+    });
+  }
+});
