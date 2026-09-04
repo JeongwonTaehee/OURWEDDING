@@ -21,6 +21,145 @@
 
   <link rel="stylesheet" href="styles.css">
   <script src="config.js"></script>
+  <!-- Firebase 방명록 스크립트 -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const listEl = document.getElementById("guestbookList");
+        const openBtn = document.getElementById("openWriterBtn");
+        const closeBtn = document.getElementById("closeWriterBtn");
+        const modal = document.getElementById("guestbookModal");
+        const form = document.getElementById("guestbookForm");
+        const loadMoreBtn = document.getElementById("loadMoreBtn");
+
+        let displayLimit = 5;
+
+        if (openBtn) openBtn.addEventListener("click", () => modal.classList.add("is-open"));
+        if (closeBtn) closeBtn.addEventListener("click", () => modal.classList.remove("is-open"));
+        if (modal) {
+          modal.addEventListener("click", (e) => {
+            if (e.target === modal) modal.classList.remove("is-open");
+          });
+        }
+
+        async function loadGuestbook() {
+          if (!listEl) return;
+          listEl.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">불러오는 중...</div>';
+          try {
+            const q = query(collection(db, "guestbook"), orderBy("createdAt", "desc"), limit(displayLimit));
+            const querySnapshot = await getDocs(q);
+            
+            listEl.innerHTML = "";
+            if (querySnapshot.empty) {
+              listEl.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">아직 작성된 방명록이 없습니다.</div>';
+              if (loadMoreBtn) loadMoreBtn.style.display = "none";
+              return;
+            }
+
+            querySnapshot.forEach((docSnap) => {
+              const data = docSnap.data();
+              const dateStr = data.createdAt ? new Date(data.createdAt.toDate()).toISOString().slice(2, 16).replace(/-/g, "-").replace("T", " ") : "";
+              
+              const card = document.createElement("div");
+              card.className = "guestbook-card";
+              card.innerHTML = `
+                <div class="guestbook-card__header">
+                  <span class="guestbook-card__name">${escapeHtml(data.name || '')}</span>
+                  <button class="guestbook-card__delete" data-id="${docSnap.id}">&times;</button>
+                </div>
+                <div class="guestbook-card__message">${escapeHtml(data.message || '')}</div>
+                <div class="guestbook-card__date">${dateStr}</div>
+              `;
+              listEl.appendChild(card);
+            });
+
+            if (loadMoreBtn) {
+              loadMoreBtn.style.display = querySnapshot.size >= displayLimit ? "block" : "none";
+            }
+          } catch (err) {
+            console.error(err);
+            listEl.innerHTML = '<div style="text-align: center; color: #888; padding: 20px;">방명록을 불러오지 못했습니다.</div>';
+          }
+        }
+
+        if (form) {
+          form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const name = document.getElementById("writerName").value.trim();
+            const password = document.getElementById("writerPassword").value.trim();
+            const message = document.getElementById("writerMessage").value.trim();
+
+            try {
+              await addDoc(collection(db, "guestbook"), {
+                name,
+                password,
+                message,
+                createdAt: new Date()
+              });
+              alert("방명록이 등록되었습니다.");
+              form.reset();
+              modal.classList.remove("is-open");
+              loadGuestbook();
+            } catch (err) {
+              alert("등록에 실패했습니다.");
+            }
+          });
+        }
+
+        if (listEl) {
+          listEl.addEventListener("click", async (e) => {
+            if (e.target.classList.contains("guestbook-card__delete")) {
+              const id = e.target.dataset.id;
+              const password = prompt("작성 시 입력한 비밀번호를 입력하세요:");
+              if (!password) return;
+
+              try {
+                const docRef = doc(db, "guestbook", id);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists() && docSnap.data().password === password) {
+                  await deleteDoc(docRef);
+                  alert("삭제되었습니다.");
+                  loadGuestbook();
+                } else {
+                  alert("비밀번호가 일치하지 않습니다.");
+                }
+              } catch (err) {
+                alert("삭제 중 오류가 발생했습니다.");
+              }
+            }
+          });
+        }
+
+        if (loadMoreBtn) {
+          loadMoreBtn.addEventListener("click", () => {
+            displayLimit += 5;
+            loadGuestbook();
+          });
+        }
+
+        function escapeHtml(str) {
+          return str.replace(/[&<>'"]/g, 
+            tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+          );
+        }
+
+        loadGuestbook();
+      });
+    </script>
 </head>
 <body>
 
@@ -107,8 +246,6 @@
       </div>
     </section>
 
-    
-
     <!-- Gallery Section -->
     <section class="section gallery" id="gallery">
       <div class="section__inner">
@@ -184,7 +321,7 @@
       </div>
     </section>
 
-    <!-- ─── Notice Section (안내사항) ─── -->
+    <!-- Notice Section (안내사항) -->
     <section class="section notice" id="notice">
       <div class="section__inner">
         <h2 class="section__title animate-item" data-animate="fade-up">안내사항</h2>
@@ -194,47 +331,47 @@
     </section>
 
     <!-- Guest Book Section (방명록) -->
-<section class="section guestbook" id="guestbook">
-  <div class="section__inner">
-    <div style="text-align: center; font-size: 0.8rem; letter-spacing: 2px; color: #888; margin-bottom: 4px;">GUEST BOOK</div>
-    <h2 class="section__title animate-item" data-animate="fade-up">방명록</h2>
-    <div class="section__divider animate-item" data-animate="fade-in"></div>
-    
-    <!-- 방명록 리스트 영역 -->
-    <div class="guestbook__list" id="guestbookList">
-      <!-- 동적으로 카드가 생성됩니다 -->
-    </div>
+    <section class="section guestbook" id="guestbook">
+      <div class="section__inner">
+        <div style="text-align: center; font-size: 0.8rem; letter-spacing: 2px; color: #888; margin-bottom: 4px;">GUEST BOOK</div>
+        <h2 class="section__title animate-item" data-animate="fade-up">방명록</h2>
+        <div class="section__divider animate-item" data-animate="fade-in"></div>
+        
+        <!-- 방명록 리스트 영역 -->
+        <div class="guestbook__list" id="guestbookList">
+          <!-- 동적으로 카드가 생성됩니다 -->
+        </div>
 
-    <!-- 버튼 영역 -->
-    <div class="guestbook__actions" style="margin-top: 24px; display: flex; flex-direction: column; gap: 10px;">
-      <button class="guestbook__btn guestbook__btn--primary" id="openWriterBtn">작성하기</button>
-      <button class="guestbook__btn guestbook__btn--outline" id="loadMoreBtn" style="display: none;">더 보기</button>
-    </div>
-  </div>
-</section>
+        <!-- 버튼 영역 -->
+        <div class="guestbook__actions" style="margin-top: 24px; display: flex; flex-direction: column; gap: 10px;">
+          <button class="guestbook__btn guestbook__btn--primary" id="openWriterBtn">작성하기</button>
+          <button class="guestbook__btn guestbook__btn--outline" id="loadMoreBtn" style="display: none;">더 보기</button>
+        </div>
+      </div>
+    </section>
 
-<!-- 방명록 작성 모달 -->
-<div class="modal" id="guestbookModal" style="display: none;">
-  <div class="modal__container" style="background: #fff; padding: 24px; border-radius: 12px; width: 90%; max-width: 400px; position: relative;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h3 style="margin: 0; font-size: 1.1rem;">방명록 작성</h3>
-      <button id="closeWriterBtn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+    <!-- 방명록 작성 모달 -->
+    <div class="modal" id="guestbookModal" style="display: none;">
+      <div class="modal__container" style="background: #fff; padding: 24px; border-radius: 12px; width: 90%; max-width: 400px; position: relative;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3 style="margin: 0; font-size: 1.1rem;">방명록 작성</h3>
+          <button id="closeWriterBtn" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
+        </div>
+        <form id="guestbookForm">
+          <div style="margin-bottom: 12px;">
+            <input type="text" id="writerName" required placeholder="이름" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
+          </div>
+          <div style="margin-bottom: 12px;">
+            <input type="password" id="writerPassword" required placeholder="비밀번호 (삭제 시 필요)" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
+          </div>
+          <div style="margin-bottom: 16px;">
+            <textarea id="writerMessage" rows="4" required placeholder="따뜻한 축하의 메시지를 남겨주세요." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; resize: none;"></textarea>
+          </div>
+          <button type="submit" style="width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">등록하기</button>
+        </form>
+      </div>
     </div>
-    <form id="guestbookForm">
-      <div style="margin-bottom: 12px;">
-        <input type="text" id="writerName" required placeholder="이름" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
-      </div>
-      <div style="margin-bottom: 12px;">
-        <input type="password" id="writerPassword" required placeholder="비밀번호 (삭제 시 필요)" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;">
-      </div>
-      <div style="margin-bottom: 16px;">
-        <textarea id="writerMessage" rows="4" required placeholder="따뜻한 축하의 메시지를 남겨주세요." style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; resize: none;"></textarea>
-      </div>
-      <button type="submit" style="width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;">등록하기</button>
-    </form>
-  </div>
-</div>
-    
+      
     <!-- Footer -->
     <footer class="footer">
       <p class="footer__text" id="footerText"></p>
