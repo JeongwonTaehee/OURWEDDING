@@ -320,10 +320,12 @@
      ═══════════════════════════════════════════ */
 
   function initStory(storyImages) {
-  $('#storyTitle').textContent = CONFIG.story.title;
+  if ($('#storyTitle') && CONFIG.story) {
+    $('#storyTitle').textContent = CONFIG.story.title;
+  }
 
   const contentEl = $('#storyContent');
-  if (CONFIG.story.groom && CONFIG.story.bride) {
+  if (contentEl && CONFIG.story && CONFIG.story.groom && CONFIG.story.bride) {
     const groom = CONFIG.story.groom;
     const bride = CONFIG.story.bride;
     contentEl.innerHTML = `
@@ -343,23 +345,7 @@
       </div>
     `;
   }
-
-
-    const container = $('#storyPhotos');
-    const placeholder = container.querySelector('.loading-placeholder');
-    if (placeholder) placeholder.remove();
-
-    if (storyImages.length === 0) return;
-
-    storyImages.forEach((src, i) => {
-      const div = document.createElement('div');
-      div.className = 'story__photo-item animate-item';
-      div.setAttribute('data-animate', 'fade-up');
-      div.innerHTML = `<img src="${src}" alt="스토리 사진 ${i + 1}" loading="lazy">`;
-      div.addEventListener('click', () => openPhotoModal(storyImages, i));
-      container.appendChild(div);
-    });
-  }
+}
 
   /* ═══════════════════════════════════════════
      Gallery Section
