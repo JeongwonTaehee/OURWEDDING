@@ -76,13 +76,12 @@ const CONFIG = {
   // ── 오시는 길 ──
   // (mapLinks는 wedding 객체 내에 포함)
 
-  // ── 마음 전하실 곳 ──
+// ── 마음 전하실 곳 ──
   accounts: {
-    description: `부득이하게 참석이 어려운 분들을 위해
-계좌번호를 기재하였습니다.`,
+    description: "부득이하게 참석이 어려운 분들을 위해\n계좌번호를 기재하였습니다.",
     groom: [
       { role: "신랑", name: "김태희", bank: "국민은행", number: "304102-04-309908" },
-      { role: "아버지", name: "김병균", bank: "국민은행", number: "774602-04-011615" },
+      { role: "아버지", name: "김병균", bank: "국민은행", number: "774602-04-011615" }
     ],
     bride: [
       { role: "신부", name: "문정원", bank: "하나은행", number: "287-910577-77107" },
