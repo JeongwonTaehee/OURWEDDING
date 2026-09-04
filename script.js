@@ -329,13 +329,13 @@
     contentEl.innerHTML = `
       <div style="display: flex; justify-content: space-around; gap: 16px; margin-top: 20px; text-align: center;">
         <div style="flex: 1;">
-          <img src="images/story/${groom.image}" style="width: 100%; max-width: 180px; border-radius: 8px; margin-bottom: 12px;" alt="신랑">
+          <img src="/images/story/${groom.image}" style="width: 100%; max-width: 180px; border-radius: 8px; margin-bottom: 12px;" alt="신랑">
           <p style="margin: 4px 0;"><span style="color: #6c88a8; font-weight: bold;">${groom.role}</span> ${groom.name}</p>
           <p style="margin: 4px 0; font-size: 0.9em; color: #666;">${groom.birth}<br>${groom.job}</p>
           <p style="margin-top: 10px; font-size: 0.85em; white-space: pre-line; line-height: 1.4;">${groom.description}</p>
         </div>
         <div style="flex: 1;">
-          <img src="images/story/${bride.image}" style="width: 100%; max-width: 180px; border-radius: 8px; margin-bottom: 12px;" alt="신부">
+          <img src="/images/story/${bride.image}" style="width: 100%; max-width: 180px; border-radius: 8px; margin-bottom: 12px;" alt="신부">
           <p style="margin: 4px 0;"><span style="color: #d88a8a; font-weight: bold;">${bride.role}</span> ${bride.name}</p>
           <p style="margin: 4px 0; font-size: 0.9em; color: #666;">${bride.birth}<br>${bride.job}</p>
           <p style="margin-top: 10px; font-size: 0.85em; white-space: pre-line; line-height: 1.4;">${bride.description}</p>
