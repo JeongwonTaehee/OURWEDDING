@@ -535,7 +535,15 @@
     });
   }
 
-  function initAccounts() {
+function initAccounts() {
+    // 계좌 설명 문구 반영 코드 추가
+    const accountDescEl = document.getElementById('accountDescription');
+    if (accountDescEl && CONFIG.accounts && CONFIG.accounts.description) {
+      accountDescEl.textContent = CONFIG.accounts.description;
+      accountDescEl.style.whiteSpace = 'pre-line';
+      accountDescEl.style.textAlign = 'center';
+    }
+
     renderAccounts(CONFIG.accounts.groom, 'groomAccountList');
     renderAccounts(CONFIG.accounts.bride, 'brideAccountList');
 
