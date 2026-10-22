@@ -677,25 +677,33 @@ window.addEventListener('DOMContentLoaded', () => {
   const galleryGrid = document.getElementById('galleryGrid');
   const galleryMoreBtn = document.getElementById('galleryMoreBtn');
 
-  if (galleryGrid && galleryMoreBtn) {
-    const observer = new MutationObserver(() => {
-      const items = galleryGrid.children;
-      if (items.length > 6) {
-        galleryMoreBtn.style.display = 'block';
-      } else {
-        galleryMoreBtn.style.display = 'none';
-      }
-    });
+  if (!galleryGrid || !galleryMoreBtn) return;
 
-    observer.observe(galleryGrid, { childList: true });
+  // 기본은 접힌 상태
+  galleryGrid.classList.remove('is-expanded');
 
-    galleryMoreBtn.addEventListener('click', () => {
-      galleryGrid.classList.toggle('is-expanded');
-      if (galleryGrid.classList.contains('is-expanded')) {
-        galleryMoreBtn.textContent = '접기';
-      } else {
-        galleryMoreBtn.textContent = '갤러리 더 보기';
-      }
-    });
+  function updateGalleryButton() {
+    const items = galleryGrid.querySelectorAll('.gallery__item');
+
+    if (items.length > 6) {
+      galleryMoreBtn.style.display = 'block';
+    } else {
+      galleryMoreBtn.style.display = 'none';
+    }
   }
+
+  // 사진이 모두 추가된 후 버튼 표시 여부 확인
+  const observer = new MutationObserver(updateGalleryButton);
+  observer.observe(galleryGrid, { childList: true });
+
+  updateGalleryButton();
+
+  // 더 보기 / 접기
+  galleryMoreBtn.addEventListener('click', () => {
+    const isExpanded = galleryGrid.classList.toggle('is-expanded');
+
+    galleryMoreBtn.textContent = isExpanded
+      ? '접기'
+      : '갤러리 더 보기';
+  });
 });
