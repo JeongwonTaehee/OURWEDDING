@@ -1099,3 +1099,39 @@ a {
 .gallery__more-btn:hover {
   background: #f9f9f9;
 }
+/* 갤러리 기본 배치 */
+.gallery__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+/* 사진 스타일 */
+.gallery__grid .gallery__item img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* 접힌 상태: 처음 6장만 표시 */
+.gallery__grid:not(.is-expanded) .gallery__item:nth-child(n + 7) {
+  display: none;
+}
+
+/* 더 보기 버튼 */
+.gallery__more-btn {
+  margin: 24px auto 0;
+  padding: 14px 24px;
+  min-width: 200px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  color: #333;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* 펼쳐진 상태 */
+.gallery__grid.is-expanded .gallery__item {
+  display: block;
+}
